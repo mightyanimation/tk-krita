@@ -966,7 +966,7 @@ class KritaEngine(Engine):
         :param panel_id: Unique identifier for the panel, as obtained by register_panel().
         :param title: The title of the panel
         :param bundle: The app, engine or framework object that is associated with this window
-        :param widget_class: The class of the UI to be constructed.
+        :param widget_class: The class of the UI to be constructed. 
                              This must derive from QWidget.
         Additional parameters specified will be passed through to the widget_class constructor.
         :returns: the created widget_class instance
@@ -987,7 +987,7 @@ class KritaEngine(Engine):
 
             class DockWidget(QtGui.QDockWidget):
                 """
-                Widget used for docking app panels that ensures the widget is closed when the
+                Widget used for docking app panels that ensures the widget is closed when the 
                 dock is closed
                 """
 
