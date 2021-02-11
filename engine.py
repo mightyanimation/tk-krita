@@ -468,6 +468,25 @@ class PyQt5Patcher(PySide2Patcher):
                     self += 1
                     value = self.value()
 
+        class QColor(QtGui.QColor):
+            """
+            Adds missing toTuple method to PyQt5 QColor class.
+            """
+            def toTuple(self):
+                if self.spec() == QtGui.QColor.Rgb:
+                    r, g, b, a = self.getRgb()
+                    return (r, g, b, a)
+                elif self.spec() == QtGui.QColor.Hsv:
+                    h, s, v, a = self.getHsv()
+                    return (h, s, v, a)
+                elif self.spec() == QtGui.QColor.Cmyk:
+                    c, m, y, k, a = self.getCmyk()
+                    return (c, m, y, k, a)
+                elif self.spec() == QtGui.QColor.Hsl:
+                    h, s, l, a = self.getHsl()
+                    return (h, s, l, a)
+                return tuple()
+
         # hot patch the library to make it work with pyside code
         QtCore.SIGNAL = SIGNAL
         QtCore.Signal = QtCore.pyqtSignal
@@ -486,6 +505,7 @@ class PyQt5Patcher(PySide2Patcher):
         QtGui.QPyTextObject = QPyTextObject
         QtGui.QTreeWidgetItem = QTreeWidgetItem
         QtGui.QTreeWidgetItemIterator = QTreeWidgetItemIterator
+        QtGui.QColor = QColor
 
         return QtCore, QtGui
 
@@ -946,7 +966,7 @@ class KritaEngine(Engine):
         :param panel_id: Unique identifier for the panel, as obtained by register_panel().
         :param title: The title of the panel
         :param bundle: The app, engine or framework object that is associated with this window
-        :param widget_class: The class of the UI to be constructed. 
+        :param widget_class: The class of the UI to be constructed.
                              This must derive from QWidget.
         Additional parameters specified will be passed through to the widget_class constructor.
         :returns: the created widget_class instance
@@ -967,7 +987,7 @@ class KritaEngine(Engine):
 
             class DockWidget(QtGui.QDockWidget):
                 """
-                Widget used for docking app panels that ensures the widget is closed when the 
+                Widget used for docking app panels that ensures the widget is closed when the
                 dock is closed
                 """
 
