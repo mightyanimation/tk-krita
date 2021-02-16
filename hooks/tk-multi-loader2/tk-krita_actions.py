@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------------
 # Copyright (c) 2019-2020, Diego Garcia Huerta.
 #
-# Your use of this software as distributed in this GitHub repository, is 
+# Your use of this software as distributed in this GitHub repository, is
 # governed by the BSD 3-clause License.
 #
 # Your use of the Shotgun Pipeline Toolkit is governed by the applicable license
@@ -14,10 +14,10 @@
 Hook that loads defines all the available actions, broken down by publish type.
 """
 
-import os
-import sgtk
 import bisect
+import os
 
+import sgtk
 from krita import Krita
 
 __author__ = "Diego Garcia Huerta"
@@ -204,7 +204,9 @@ class KritaActions(HookBaseClass):
                     "params": None,
                     "caption": "Import as animated frames",
                     "description": (
-                        "Import the Image Sequence as animated frames into the current document inserting frames from the current time onwards"
+                        "Import the Image Sequence as animated frames into the"
+                        " current document inserting frames from the current "
+                        "time onwards"
                     ),
                 }
             )
@@ -332,7 +334,9 @@ class KritaActions(HookBaseClass):
         template = app.sgtk.template_from_path(path)
         fields = template.get_fields(path)
 
-        images = app.sgtk.paths_from_template(template, fields, skip_keys=[SEQUENCE_FIELD])
+        images = app.sgtk.paths_from_template(
+            template, fields, skip_keys=[SEQUENCE_FIELD]
+        )
 
         # a quick way to get the images sorted by frame, as this matters when
         # we insert them in the layer

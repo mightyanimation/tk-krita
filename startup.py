@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------------
 # Copyright (c) 2019-2020, Diego Garcia Huerta.
 #
-# Your use of this software as distributed in this GitHub repository, is 
+# Your use of this software as distributed in this GitHub repository, is
 # governed by the BSD 3-clause License.
 #
 # Your use of the Shotgun Pipeline Toolkit is governed by the applicable license
@@ -10,17 +10,15 @@
 # The full license is in the file LICENSE, distributed with this software.
 # ----------------------------------------------------------------------------
 
-import os
-import sys
 import cgitb
-import shutil
 import hashlib
-
+import os
+import shutil
+import sys
 
 import sgtk
-from sgtk.platform import SoftwareLauncher, SoftwareVersion, LaunchInformation
 from sgtk.pipelineconfig_utils import get_sgtk_module_path
-
+from sgtk.platform import LaunchInformation, SoftwareLauncher, SoftwareVersion
 
 __author__ = "Diego Garcia Huerta"
 __contact__ = "https://www.linkedin.com/in/diegogh/"
@@ -71,7 +69,7 @@ def samefile(file1, file2):
 
 
 # based on:
-# https://stackoverflow.com/questions/38876945/copying-and-merging-directories-excluding-certain-extensions
+# https://stackoverflow.com/questions/38876945/copying-and-merging-directories-excluding-certain-extensions # noqa: B950
 def copytree_multi(src, dst, symlinks=False, ignore=None):
     names = os.listdir(src)
     if ignore is not None:
@@ -196,7 +194,9 @@ class KritaLauncher(SoftwareLauncher):
         """
         required_env = {}
 
-        resources_plugins_path = os.path.join(self.disk_location, "resources", "extensions")
+        resources_plugins_path = os.path.join(
+            self.disk_location, "resources", "extensions"
+        )
 
         # Run the engine's init.py file when the application starts up
         startup_path = os.path.join(self.disk_location, "startup", "init.py")
@@ -310,7 +310,9 @@ class KritaLauncher(SoftwareLauncher):
                 # extract the matched keys form the key_dict (default to None
                 # if not included)
                 self.logger.debug(
-                    "Processing executable_path: %s | dict %s", executable_path, key_dict
+                    "Processing executable_path: %s | dict %s",
+                    executable_path,
+                    key_dict,
                 )
 
                 # no way to extract the version from this application, so no

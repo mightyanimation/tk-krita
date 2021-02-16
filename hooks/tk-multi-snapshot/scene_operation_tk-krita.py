@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------------
 # Copyright (c) 2019-2020, Diego Garcia Huerta.
 #
-# Your use of this software as distributed in this GitHub repository, is 
+# Your use of this software as distributed in this GitHub repository, is
 # governed by the BSD 3-clause License.
 #
 # Your use of the Shotgun Pipeline Toolkit is governed by the applicable license
@@ -13,8 +13,8 @@
 import os
 
 import sgtk
-from sgtk import Hook
-from sgtk import TankError
+from krita import Krita
+from sgtk import Hook, TankError
 
 __author__ = "Diego Garcia Huerta"
 __contact__ = "https://www.linkedin.com/in/diegogh/"
@@ -22,12 +22,10 @@ __contact__ = "https://www.linkedin.com/in/diegogh/"
 
 HookClass = sgtk.get_hook_baseclass()
 
-from krita import Krita
-
 
 class SceneOperation(HookClass):
     """
-    Hook called to perform an operation with the 
+    Hook called to perform an operation with the
     current scene
     """
 
@@ -47,10 +45,8 @@ class SceneOperation(HookClass):
                                      file path as a String
                     all others     - None
         """
-        app = self.parent
-
         krita_app = Krita.instance()
-        active_doc = Krita.instance().activeDocument()
+        active_doc = krita_app.activeDocument()
 
         if operation == "current_path":
             current_project_filename = None

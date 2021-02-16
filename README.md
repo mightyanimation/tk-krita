@@ -10,7 +10,7 @@ Contact : [Diego Garcia Huerta](https://www.linkedin.com/in/diegogh/)
 
 ## Overview
 
-Implementation of a shotgun engine for [**Krita**](https://krita.org). It supports the classic bootstrap startup methodology and integrates with Krita adding a new Shotgun Menu in the main Krita tool-bar. 
+Implementation of a shotgun engine for [**Krita**](https://krita.org). It supports the classic bootstrap startup methodology and integrates with Krita adding a new Shotgun Menu in the main Krita tool-bar.
 
 * [Engine Installation](#engine-installation)
 * [Configuring your project for Shotgun Toolkit](#configuring-your-project-for-shotgun-toolkit)
@@ -85,7 +85,7 @@ If you haven't done it yet, make sure you have gone through the basic steps to c
 * *Project Folder Name*: This is the name of the project in disk. You might have some sort of naming convention for project that you might follow, or leave as it is. (My advice is that you do not include spaces in the name)
 ![project_folder_name](config/images/project_folder_name.png)
 
-* *Select Deployment*: Choose "Centralized Setup". This will be the location of the configuration files (that we will be modifying later). For example, you could place the specific configuration for a project (in this example called game_config) within a folder called "configs" at the same level then the jobs folder, something like: 
+* *Select Deployment*: Choose "Centralized Setup". This will be the location of the configuration files (that we will be modifying later). For example, you could place the specific configuration for a project (in this example called game_config) within a folder called "configs" at the same level then the jobs folder, something like:
 ```shell
 ├───jobs
 └───configs
@@ -116,7 +116,7 @@ If you haven't done it yet, make sure you have gone through the basic steps to c
 
 Every pipeline configuration has got different environments where you can configure apps accordingly. (for example you might want different apps depending if you are at an asset context or a shot context. The configured environments really depend on your projects requirements. While project, asset, asset_step, sequence, shot, shot_step, site are the standard ones, it is not uncommon to have a sequence_step environment or use a episode based environment either.
 
-I've included a folder called 'config' in this repository where you can find the additions to each of the environments and configuration YAML files that come with the [default shotgun toolkit configuration repository](https://github.com/shotgunsoftware/tk-config-default2) (as of writing) 
+I've included a folder called 'config' in this repository where you can find the additions to each of the environments and configuration YAML files that come with the [default shotgun toolkit configuration repository](https://github.com/shotgunsoftware/tk-config-default2) (as of writing)
 
 [configuration additions](config)
 
@@ -168,11 +168,11 @@ The additions to `config/core/templates.yml` are provided also under the config 
 
 In order for our application to show up in the shotgun launcher, we need to add it to our list of software that is valid for this project.
 
-* Navigate to your shotgun URL, ie. `example.shotgunstudio.com`, and once logged in, clink in the Shotgun Settings menu, the arrow at the top right of the web page, close to your user picture. 
+* Navigate to your shotgun URL, ie. `example.shotgunstudio.com`, and once logged in, clink in the Shotgun Settings menu, the arrow at the top right of the web page, close to your user picture.
 * Click in the Software menu
 ![select_a_project_configuration](config/images/select_a_project_configuration.png)
 
-* We will create a new entry for Krita, called "Krita" and whose description can be conveniently copy and pasted from [Krita entry in Wikipedia](https://en.wikipedia.org/wiki/Krita) 
+* We will create a new entry for Krita, called "Krita" and whose description can be conveniently copy and pasted from [Krita entry in Wikipedia](https://en.wikipedia.org/wiki/Krita)
 ![create_new_software](config/images/create_new_software.png)
 
 * We now should specify the engine this software will use. "tk-krita"
@@ -187,7 +187,7 @@ If you want more information on how to configure software launches, here is the 
 
 ## Caching and downloading the engine into disk
 
-One last step is to cache the engine and apps from the configuration files into disk. Shotgun provides a tank command for this. 
+One last step is to cache the engine and apps from the configuration files into disk. Shotgun provides a tank command for this.
 [Tank Advanced Commands](https://support.shotgunsoftware.com/hc/en-us/articles/219033178-Administering-Toolkit#Advanced%20tank%20commands)
 
 * Open a console and navigate to your pipeline configuration folder, where you will find a `tank` or `tank.bat` file.
@@ -206,12 +206,12 @@ If we now go back and forth from our project in shotgun desktop ( < arrow top le
 
 ## Enable the Shotgun Plugin Engine within Krita
 
-One last step! The first time that you use the integration, you will have to make sure the Shotgun Engine plugin is enabled within Krita. 
+One last step! The first time that you use the integration, you will have to make sure the Shotgun Engine plugin is enabled within Krita.
 
 You can find this option by accessing the Plugin Manager options:
 `Settings > Configure Krita > Python Plugin Manager ... > Shotgun`
 
-Mark the Shotgun plugin as active and make sure you restart Krita from Shotgun Desktop. Once this is done, a new `Shotgun` menu will be shown in the menu bar. 
+Mark the Shotgun plugin as active and make sure you restart Krita from Shotgun Desktop. Once this is done, a new `Shotgun` menu will be shown in the menu bar.
 
 <img src="./config/images/enable_plugin.png" width="100%" alt="engine_is_configured">
 
@@ -265,7 +265,7 @@ The Shotgun Loader lets you quickly overview and browse the files that you have 
 
 The Publish app allows artists to publish their work so that it can be used by artists downstream. It supports traditional publishing workflows within the artist’s content creation software as well as stand-alone publishing of any file on disk. When working in content creation software and using the basic Shotgun integration, the app will automatically discover and display items for the artist to publish. For more sophisticated production needs, studios can write custom publish plugins to drive artist workflows.
 
-The basic publishing of the current session is provided as ![hooks](hooks/tk-multi-publish2/basic) for this app. 
+The basic publishing of the current session is provided as ![hooks](hooks/tk-multi-publish2/basic) for this app.
 
 I also provide the ability to publish the layers from a Krita session as a published folder, or as individual published layers.
 
@@ -305,7 +305,7 @@ Please adjust this logic accordingly to however you want to handle frame ranges 
 
 The way this engine works is via a [Krita extension](resources/extensions) that triggers the instancing of the Krita toolkit engine. Once the engine is up and running, the [menus](python/tk_krita/menu_generation.py) are created as normal using PyQt5 widgets, very similar to other engines.
 
-The biggest challenges writing this engine were first dealing with a work in progress toolkit that was being ported to Python3 as I was writing it (Krita runs in Python3), and more complicated, the fact that PyQt5 is used within Krita and this is not supported by Shotgun Toolkit. 
+The biggest challenges writing this engine were first dealing with a work in progress toolkit that was being ported to Python3 as I was writing it (Krita runs in Python3), and more complicated, the fact that PyQt5 is used within Krita and this is not supported by Shotgun Toolkit.
 
 # Shotgun Toolkit development notes
 
@@ -337,7 +337,7 @@ I left the code ready for when I find a way to extract the Krita version that is
 
 **Krita script paths**
 
-It would be very convenient to have an environment variable where Krita looks for extensions. I found the *EXTRA_RESOURCE_DIRS* environment variable digging the source code of Krita, but for some obscure reason I could not make it work to read the extension that triggers the engine. 
+It would be very convenient to have an environment variable where Krita looks for extensions. I found the *EXTRA_RESOURCE_DIRS* environment variable digging the source code of Krita, but for some obscure reason I could not make it work to read the extension that triggers the engine.
 
 It would be handy not to have to copy the extension to the users data location. If this is implemented, note that would be ideal to support multiple locations for scripts, not just a single one.
 
@@ -365,7 +365,7 @@ This repository is a part of the Shotgun Pipeline Toolkit.
 - For information about Shotgun in general, click here: http://www.shotgunsoftware.com/toolkit
 
 ## Using this app in your Setup
-All the apps that are part of our standard app suite are pushed to our App Store. 
+All the apps that are part of our standard app suite are pushed to our App Store.
 This is where you typically go if you want to install an app into a project you are
 working on. For an overview of all the Apps and Engines in the Toolkit App Store,
 click here: https://support.shotgunsoftware.com/entries/95441247.

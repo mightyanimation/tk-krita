@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------------
 # Copyright (c) 2019-2020, Diego Garcia Huerta.
 #
-# Your use of this software as distributed in this GitHub repository, is 
+# Your use of this software as distributed in this GitHub repository, is
 # governed by the BSD 3-clause License.
 #
 # Your use of the Shotgun Pipeline Toolkit is governed by the applicable license
@@ -10,19 +10,19 @@
 # The full license is in the file LICENSE, distributed with this software.
 # ----------------------------------------------------------------------------
 
-import os
-import traceback
 import contextlib
+import os
 import tempfile
+import traceback
 
 import sgtk
+from krita import InfoObject, Krita
 from sgtk import TankError
-from sgtk.util.filesystem import copy_folder, ensure_folder_exists
 from sgtk.platform.qt import QtCore
-from sgtk.util.version import is_version_older
+from sgtk.util.filesystem import copy_folder
 from sgtk.util.filesystem import create_valid_filename as sanitize_node_name
-
-from krita import Krita, InfoObject
+from sgtk.util.filesystem import ensure_folder_exists
+from sgtk.util.version import is_version_older
 
 __author__ = "Diego Garcia Huerta"
 __contact__ = "https://www.linkedin.com/in/diegogh/"
@@ -215,7 +215,9 @@ class KritaLayersPublishPlugin(HookBaseClass):
         if publish_template:
             item.context_change_allowed = False
 
-        self.logger.info("Krita '%s' plugin accepted publishing Krita layers." % (self.name,))
+        self.logger.info(
+            "Krita '%s' plugin accepted publishing Krita layers." % (self.name,)
+        )
         return {"accepted": True, "checked": True}
 
     def get_publish_template(self, settings, item):
@@ -374,7 +376,7 @@ class KritaLayersPublishPlugin(HookBaseClass):
 
     def get_export_path(self, settings, item):
         """
-        Retrieves the path to export eh layer before it gets copied to the 
+        Retrieves the path to export eh layer before it gets copied to the
         publish location. This is handy if you use a different location for
         wip files than publish files.
 
@@ -383,11 +385,9 @@ class KritaLayersPublishPlugin(HookBaseClass):
             instances.
         :param item: Item to process
 
-        :returns: the location where the layer will be export before it is 
+        :returns: the location where the layer will be export before it is
             published
         """
-        publisher = self.parent
-
         export_path = item.get_property("export_path")
         if export_path:
             return export_path
@@ -399,12 +399,11 @@ class KritaLayersPublishPlugin(HookBaseClass):
 
         # we define a default export location if the path could not be resolved
         if not export_path:
-            node_name = item.properties["node_name"]
             session_path = item.properties["session_path"]
             session_dir, session_filename = os.path.split(session_path)
             session_filename_file = os.path.basename(session_filename)
 
-            export_path = os.path.join(session_path_dir, "layers", session_filename_file)
+            export_path = os.path.join(session_dir, "layers", session_filename_file)
 
         self.logger.debug("Export path will be: %s" % export_path)
 
@@ -420,7 +419,6 @@ class KritaLayersPublishPlugin(HookBaseClass):
             return publish_path
 
         # ensure templates are available
-        work_session_template = item.properties.get("work_template")
         publish_template = self.get_publish_template(settings, item)
 
         publish_path = self.get_path_from_work_template(settings, item, publish_template)
@@ -484,7 +482,9 @@ class KritaLayersPublishPlugin(HookBaseClass):
     def session_validate(self, settings, item):
         document = _session_document()
         if not document:
-            error_msg = "There is no active document opened in Krita. Publishing Canceled."
+            error_msg = (
+                "There is no active document opened in Krita. Publishing Canceled."
+            )
             self.logger.error(error_msg)
             raise Exception(error_msg)
 
@@ -560,7 +560,9 @@ class KritaLayersPublishPlugin(HookBaseClass):
         if layer_name_template:
             self.logger.debug("Layer Name template: %s " % layer_name_template)
         else:
-            self.logger.warning("No Layer Name template defined for the layers as folder.")
+            self.logger.warning(
+                "No Layer Name template defined for the layers as folder."
+            )
 
         # publish template
         publish_template = self.get_publish_template(settings, item)
@@ -581,8 +583,6 @@ class KritaLayersPublishPlugin(HookBaseClass):
         :returns: True if item is valid, False otherwise.
         """
 
-        publisher = self.parent
-
         self.session_validate(settings, item)
         self.templates_validate(settings, item)
 
@@ -592,10 +592,10 @@ class KritaLayersPublishPlugin(HookBaseClass):
             item.set_thumbnail_from_path(doc_thumbnail)
 
         # figure out the export path
-        export_path = self.get_export_path(settings, item)
+        self.get_export_path(settings, item)
 
         # and the publish path
-        publish_path = self.get_publish_path(settings, item)
+        self.get_publish_path(settings, item)
 
         # run the base class validation
         return super(KritaLayersPublishPlugin, self).validate(settings, item)
@@ -641,10 +641,7 @@ class KritaLayersPublishPlugin(HookBaseClass):
         ensure the publish path folder exists and then copy the file to that
         location.
         """
-        krita_app = Krita.instance()
-
         nodes = item.properties.get("nodes")
-        session_path = item.properties.get("session_path")
         active_doc = item.properties.get("session_document")
 
         # export the actual layers
@@ -673,7 +670,10 @@ class KritaLayersPublishPlugin(HookBaseClass):
                 layer_name = None
                 if layer_name_template:
                     layer_name = self.get_path_from_work_template(
-                        settings, item, layer_name_template, extra_fields={"name": node_name}
+                        settings,
+                        item,
+                        layer_name_template,
+                        extra_fields={"name": node_name},
                     )
 
                 if not layer_name:

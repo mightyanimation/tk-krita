@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------------
 # Copyright (c) 2019-2020, Diego Garcia Huerta.
 #
-# Your use of this software as distributed in this GitHub repository, is 
+# Your use of this software as distributed in this GitHub repository, is
 # governed by the BSD 3-clause License.
 #
 # Your use of the Shotgun Pipeline Toolkit is governed by the applicable license
@@ -10,15 +10,14 @@
 # The full license is in the file LICENSE, distributed with this software.
 # ----------------------------------------------------------------------------
 
+import contextlib
 import os
 import tempfile
-import contextlib
 
 import sgtk
+from krita import InfoObject, Krita
 from sgtk.util.filesystem import ensure_folder_exists
 from sgtk.util.version import is_version_older
-
-from krita import Krita, InfoObject
 
 __author__ = "Diego Garcia Huerta"
 __contact__ = "https://www.linkedin.com/in/diegogh/"
@@ -279,7 +278,9 @@ class KritaSessionPublishPlugin(HookBaseClass):
     def session_validate(self, settings, item):
         document = _session_document()
         if not document:
-            error_msg = "There is no active document opened in Krita. Publishing Canceled."
+            error_msg = (
+                "There is no active document opened in Krita. Publishing Canceled."
+            )
             self.logger.error(error_msg)
             raise Exception(error_msg)
 
@@ -359,8 +360,6 @@ class KritaSessionPublishPlugin(HookBaseClass):
         :returns: True if item is valid, False otherwise.
         """
 
-        publisher = self.parent
-
         self.session_validate(settings, item)
         self.templates_validate(settings, item)
 
@@ -419,7 +418,9 @@ class KritaSessionPublishPlugin(HookBaseClass):
         item.properties["path"] = path
 
         # add dependencies for the base class to register when publishing
-        item.properties["publish_dependencies"] = _krita_find_additional_session_dependencies()
+        item.properties[
+            "publish_dependencies"
+        ] = _krita_find_additional_session_dependencies()
 
         # let the base class register the publish
         super(KritaSessionPublishPlugin, self).publish(settings, item)

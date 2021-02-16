@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------------
 # Copyright (c) 2019-2020, Diego Garcia Huerta.
 #
-# Your use of this software as distributed in this GitHub repository, is 
+# Your use of this software as distributed in this GitHub repository, is
 # governed by the BSD 3-clause License.
 #
 # Your use of the Shotgun Pipeline Toolkit is governed by the applicable license
@@ -19,13 +19,14 @@ import os
 import sys
 import traceback
 
+import sgtk
+
 __author__ = "Diego Garcia Huerta"
 __contact__ = "https://www.linkedin.com/in/diegogh/"
 
 
 ENGINE_NAME = "tk-krita"
 
-import sgtk
 
 logger = sgtk.LogManager.get_logger(__name__)
 
@@ -45,7 +46,7 @@ def display_info(msg):
 def start_toolkit_classic():
     """
     Parse enviornment variables for an engine name and
-    serialized Context to use to startup Toolkit, 
+    serialized Context to use to startup Toolkit,
     the engine and environment.
     """
 
@@ -82,7 +83,7 @@ def start_toolkit_classic():
         logger.debug(
             "Launching engine instance '%s' for context %s" % (env_engine, env_context)
         )
-        engine = sgtk.platform.start_engine(env_engine, context.sgtk, context)
+        sgtk.platform.start_engine(env_engine, context.sgtk, context)
     except Exception as e:
         msg = "Shotgun: Could not start engine. Details: %s" % e
         etype, value, tb = sys.exc_info()

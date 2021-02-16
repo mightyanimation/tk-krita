@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------------
 # Copyright (c) 2019-2020, Diego Garcia Huerta.
 #
-# Your use of this software as distributed in this GitHub repository, is 
+# Your use of this software as distributed in this GitHub repository, is
 # governed by the BSD 3-clause License.
 #
 # Your use of the Shotgun Pipeline Toolkit is governed by the applicable license
@@ -10,15 +10,13 @@
 # The full license is in the file LICENSE, distributed with this software.
 # ----------------------------------------------------------------------------
 
-from tank import Hook
 import os
 
+from krita import Krita
+from tank import Hook
 
 __author__ = "Diego Garcia Huerta"
 __contact__ = "https://www.linkedin.com/in/diegogh/"
-
-
-from krita import Krita
 
 
 class BreakdownSceneOperations(Hook):
@@ -34,8 +32,8 @@ class BreakdownSceneOperations(Hook):
         to analyze the current scene and return a list of references that are
         to be potentially operated on.
 
-        The return data structure is a list of dictionaries. Each scene 
-        reference that is returned should be represented by a dictionary with 
+        The return data structure is a list of dictionaries. Each scene
+        reference that is returned should be represented by a dictionary with
         three keys:
 
         - "attr": The filename attribute of the 'node' that is to be operated
@@ -47,7 +45,7 @@ class BreakdownSceneOperations(Hook):
 
         Toolkit will scan the list of items, see if any of the objects matches
         any templates and try to determine if there is a more recent version
-        available. Any such versions are then displayed in the UI as out of 
+        available. Any such versions are then displayed in the UI as out of
         date.
         """
 
@@ -61,7 +59,7 @@ class BreakdownSceneOperations(Hook):
 
         for widget in engine.created_qt_dialogs:
             if widget._widget._app == app:
-                ui = widget._widget.ui.update.hide()
+                widget._widget.ui.update.hide()
                 break
 
         # Introspect the krita scene for read and write nodes

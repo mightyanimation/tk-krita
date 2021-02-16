@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------------
 # Copyright (c) 2019-2020, Diego Garcia Huerta.
 #
-# Your use of this software as distributed in this GitHub repository, is 
+# Your use of this software as distributed in this GitHub repository, is
 # governed by the BSD 3-clause License.
 #
 # Your use of the Shotgun Pipeline Toolkit is governed by the applicable license
@@ -11,8 +11,8 @@
 # ----------------------------------------------------------------------------
 
 import os
-import sgtk
 
+import sgtk
 from krita import Krita
 
 __author__ = "Diego Garcia Huerta"
@@ -341,6 +341,6 @@ def _get_version_docs_action():
         "action_open_url": {
             "label": "Version Docs",
             "tooltip": "Show docs for version formats",
-            "url": "https://support.shotgunsoftware.com/hc/en-us/articles/115000068574-User-Guide-WIP-#What%20happens%20when%20you%20publish",
+            "url": "https://support.shotgunsoftware.com/hc/en-us/articles/115000068574-User-Guide-WIP-#What%20happens%20when%20you%20publish",  # noqa: B950
         }
     }

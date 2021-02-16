@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------------
 # Copyright (c) 2019-2020, Diego Garcia Huerta.
 #
-# Your use of this software as distributed in this GitHub repository, is 
+# Your use of this software as distributed in this GitHub repository, is
 # governed by the BSD 3-clause License.
 #
 # Your use of the Shotgun Pipeline Toolkit is governed by the applicable license
@@ -15,15 +15,14 @@ Menu handling for this engine
 
 """
 
-import tank
-import sys
 import os
 import subprocess
+import sys
 import unicodedata
 
-from tank.util import is_windows, is_linux, is_macos
-from tank.platform.qt import QtGui, QtCore
-
+import tank
+from tank.platform.qt import QtCore, QtGui
+from tank.util import is_linux, is_macos, is_windows
 
 __author__ = "Diego Garcia Huerta"
 __contact__ = "https://www.linkedin.com/in/diegogh/"
@@ -43,7 +42,7 @@ def get_menubar():
 
 
 def can_create_menu():
-    """ 
+    """
     This is used to indicate if the menu can be created in this DCC app.
     Only when there is a menu bar available we can create the menu.
     """
@@ -74,19 +73,24 @@ class Callback(object):
 
     def __call__(self, *_):
         """
-        Execute the callback deferred to avoid potential problems with the command resulting in the menu
-        being deleted, e.g. if the context changes resulting in an engine restart! - this was causing a
-        segmentation fault crash on Linux.
+        Execute the callback deferred to avoid potential problems with the
+        command resulting in the menu being deleted, e.g. if the context changes
+        resulting in an engine restart! - this was causing a segmentation fault
+        crash on Linux.
         :param _: Accepts any args so that a callback might throw at it.
-        For example a menu callback will pass the menu state. We accept these and ignore them.
+        For example a menu callback will pass the menu state. We accept these
+        and ignore them.
         """
-        # note that we use a single shot timer instead of cmds.evalDeferred as we were experiencing
-        # odd behaviour when the deferred command presented a modal dialog that then performed a file
-        # operation that resulted in a QMessageBox being shown - the deferred command would then run
-        # a second time, presumably from the event loop of the modal dialog from the first command!
+        # note that we use a single shot timer instead of cmds.evalDeferred as
+        # we were experiencing odd behaviour when the deferred command presented
+        # a modal dialog that then performed a file operation that resulted in a
+        # QMessageBox being shown - the deferred command would then run a second
+        # time, presumably from the event loop of the modal dialog from the
+        # first command!
         #
-        # As the primary purpose of this method is to detach the executing code from the menu invocation,
-        # using a singleShot timer achieves this without the odd behaviour exhibited by evalDeferred.
+        # As the primary purpose of this method is to detach the executing code
+        # from the menu invocation, using a singleShot timer achieves this
+        # without the odd behaviour exhibited by evalDeferred.
 
         # This logic is implemented in the plugin_logic.py Callback class.
 
@@ -146,7 +150,9 @@ class MenuGenerator(object):
         menu_items = []
         for (cmd_name, cmd_details) in self._engine.commands.items():
             self._engine.log_debug("engine command: %s : %s" % (cmd_name, cmd_details))
-            menu_items.append(AppCommand(cmd_name, self, cmd_details, self._engine.logger))
+            menu_items.append(
+                AppCommand(cmd_name, self, cmd_details, self._engine.logger)
+            )
 
         # sort list of commands in name order
         menu_items.sort(key=lambda x: x.name)
@@ -159,7 +165,10 @@ class MenuGenerator(object):
             # scan through all menu items
             for cmd in menu_items:
                 self._engine.log_debug("cmd: %s" % cmd.name)
-                if cmd.get_app_instance_name() == app_instance_name and cmd.name == menu_name:
+                if (
+                    cmd.get_app_instance_name() == app_instance_name
+                    and cmd.name == menu_name
+                ):
                     # found our match!
                     cmd.add_command_to_menu(self._handle)
                     # mark as a favourite item
@@ -183,7 +192,7 @@ class MenuGenerator(object):
                 if app_name is None:
                     # un-parented app
                     app_name = "Other Items"
-                if not app_name in commands_by_app:
+                if app_name not in commands_by_app:
                     commands_by_app[app_name] = []
                 commands_by_app[app_name].append(cmd)
 
@@ -258,7 +267,7 @@ class MenuGenerator(object):
 
     def _toggle_multi_document(self):
         """
-        This disables/enables upadtes of engine context if the active 
+        This disables/enables upadtes of engine context if the active
         document changes to some file known by tookit.
         """
         self._engine.toggle_active_document_context_switch()
@@ -334,8 +343,6 @@ class AppCommand(object):
         self.callback = command_dict["callback"]
         self.favourite = False
         self.logger = logger
-
-        engine = self.parent._engine
 
     def get_app_name(self):
         """

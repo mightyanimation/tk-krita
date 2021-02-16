@@ -12,22 +12,20 @@
 https://en.wikipedia.org/wiki/Krita_(software)
 """
 
+import inspect
+import logging
 import os
 import sys
 import time
-import inspect
-import logging
 import traceback
 
+import krita
 import tank
+import tank.platform.framework
 from tank.log import LogManager
 from tank.platform import Engine
+from tank.util import is_linux, is_macos, is_windows
 from tank.util.pyside2_patcher import PySide2Patcher
-from tank.util import is_windows, is_linux, is_macos
-
-import tank.platform.framework
-import krita
-
 
 __author__ = "Diego Garcia Huerta"
 __contact__ = "https://www.linkedin.com/in/diegogh/"
@@ -137,8 +135,8 @@ def refresh_engine():
         # If we don't have an engine for some reason then we don't have
         # anything to do.
         logger.debug(
-            "%s Refresh_engine | No currently initialized engine found; aborting the refresh of the engine\n"
-            % APPLICATION_NAME
+            "%s Refresh_engine | No currently initialized engine found; "
+            "aborting the refresh of the engine\n" % APPLICATION_NAME
         )
         return
 
@@ -184,7 +182,9 @@ def refresh_engine():
 
     ctx = tk.context_from_path(active_doc_path, current_context)
     logger.debug(
-        "Given the path: '%s' the following context was extracted: '%r'", active_doc_path, ctx
+        "Given the path: '%s' the following context was extracted: '%r'",
+        active_doc_path,
+        ctx,
     )
 
     # default to project context in worse case scenario
@@ -259,7 +259,8 @@ def _fix_tk_multi_pythonconsole(logger):
 
             PythonTabWidget.keyPressEvent = keyPressEvent
             logger.debug(
-                "Applied tk-krita fix to tk-multi-python console. Class:%s" % PythonTabWidget
+                "Applied tk-krita fix to tk-multi-python console. Class:%s"
+                % PythonTabWidget
             )
         except Exception:
             logger.warning(
@@ -335,10 +336,10 @@ class PyQt5Patcher(PySide2Patcher):
         class QAction(QtGui.QAction):
             """
             From the docs:
-            https://www.riverbankcomputing.com/static/Docs/PyQt5/incompatibilities.html#qt-signals-with-default-arguments
+            https://www.riverbankcomputing.com/static/Docs/PyQt5/incompatibilities.html#qt-signals-with-default-arguments  # noqa: B950
 
             Explanation:
-            https://stackoverflow.com/questions/44371451/python-pyqt-qt-qmenu-qaction-syntax
+            https://stackoverflow.com/questions/44371451/python-pyqt-qt-qmenu-qaction-syntax  # noqa: B950
 
             A lot of cases in tk apps where QAction triggered signal is
             connected with `triggered[()].connect` which in PyQt5 is a problem
@@ -363,7 +364,9 @@ class PyQt5Patcher(PySide2Patcher):
 
             def __init__(self, *args, **kwargs):
                 super(QAction, self).__init__(*args, **kwargs)
-                super(QAction, self).triggered.connect(lambda checked: self.triggered_[()])
+                super(QAction, self).triggered.connect(
+                    lambda checked: self.triggered_[()]
+                )
                 super(QAction, self).triggered.connect(self.triggered_[bool])
                 self.triggered = self.triggered_
                 self.triggered.connect(self._onTriggered)
@@ -379,12 +382,16 @@ class PyQt5Patcher(PySide2Patcher):
 
             def __init__(self, *args, **kwargs):
                 super(QAbstractButton, self).__init__(*args, **kwargs)
-                super(QAbstractButton, self).clicked.connect(lambda checked: self.clicked_[()])
+                super(QAbstractButton, self).clicked.connect(
+                    lambda checked: self.clicked_[()]
+                )
                 super(QAbstractButton, self).clicked.connect(self.clicked_[bool])
                 self.clicked = self.clicked_
                 self.clicked.connect(self._onClicked)
 
-                super(QAction, self).triggered.connect(lambda checked: self.triggered_[()])
+                super(QAction, self).triggered.connect(
+                    lambda checked: self.triggered_[()]
+                )
                 super(QAction, self).triggered.connect(self.triggered_[bool])
                 self.triggered = self.triggered_
                 self.triggered.connect(self._onTriggered)
@@ -399,7 +406,12 @@ class PyQt5Patcher(PySide2Patcher):
             https://doc.bccnsoft.com/docs/PyQt5/pyqt4_differences.html#old-style-signals-and-slots
             """
 
-            def connect(sender, signal, method, connection_type=QtCore.Qt.AutoConnection):
+            def connect(
+                sender,  # noqa: B902
+                signal,
+                method,
+                connection_type=QtCore.Qt.AutoConnection,
+            ):
                 if hasattr(sender, signal):
                     getattr(sender, signal).connect(method, connection_type)
 
@@ -472,6 +484,7 @@ class PyQt5Patcher(PySide2Patcher):
             """
             Adds missing toTuple method to PyQt5 QColor class.
             """
+
             def toTuple(self):
                 if self.spec() == QtGui.QColor.Rgb:
                     r, g, b, a = self.getRgb()
@@ -559,7 +572,8 @@ class KritaEngine(Engine):
 
         except ImportError as e:
             self.log_warning(
-                "Error setting up PyQt. PyQt based UI support will not be available: %s" % e
+                "Error setting up PyQt. PyQt based UI support will not be available: %s"
+                % e
             )
             self.log_debug(traceback.format_exc())
             return base
@@ -670,9 +684,12 @@ class KritaEngine(Engine):
         krita_ver = float(".".join(krita_build_version.split(".")[:2]))
 
         if krita_ver < MIN_COMPATIBILITY_VERSION:
-            msg = "Shotgun integration is not compatible with %s versions older than %s" % (
-                APPLICATION_NAME,
-                MIN_COMPATIBILITY_VERSION,
+            msg = (
+                "Shotgun integration is not compatible with %s versions older than %s"
+                % (
+                    APPLICATION_NAME,
+                    MIN_COMPATIBILITY_VERSION,
+                )
             )
             show_error(msg)
             raise tank.TankError(msg)
@@ -860,7 +877,9 @@ class KritaEngine(Engine):
             if app_instance:
                 # Add entry 'command name: command function' to the command
                 # dictionary of this app instance.
-                cmd_dict = app_instance_commands.setdefault(app_instance.instance_name, {})
+                cmd_dict = app_instance_commands.setdefault(
+                    app_instance.instance_name, {}
+                )
                 cmd_dict[cmd_name] = value["callback"]
 
         # Run the series of app instance commands listed in the
@@ -966,7 +985,7 @@ class KritaEngine(Engine):
         :param panel_id: Unique identifier for the panel, as obtained by register_panel().
         :param title: The title of the panel
         :param bundle: The app, engine or framework object that is associated with this window
-        :param widget_class: The class of the UI to be constructed. 
+        :param widget_class: The class of the UI to be constructed.
                              This must derive from QWidget.
         Additional parameters specified will be passed through to the widget_class constructor.
         :returns: the created widget_class instance
@@ -987,7 +1006,7 @@ class KritaEngine(Engine):
 
             class DockWidget(QtGui.QDockWidget):
                 """
-                Widget used for docking app panels that ensures the widget is closed when the 
+                Widget used for docking app panels that ensures the widget is closed when the
                 dock is closed
                 """
 
@@ -1099,7 +1118,9 @@ class KritaEngine(Engine):
                 dialog.close()
             except Exception as exception:
                 traceback.print_exc()
-                self.logger.error("Cannot close dialog %s: %s", dialog_window_title, exception)
+                self.logger.error(
+                    "Cannot close dialog %s: %s", dialog_window_title, exception
+                )
 
         # Close all dock widgets previously added.
         for dock_widget in self._dock_widgets[:]:

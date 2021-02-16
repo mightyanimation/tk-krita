@@ -27,7 +27,7 @@ configuration:
     active_document_context_switch:
         type: bool
         description: "Controls whether the engine should attempt to automatically adjust its
-                     context every time the active document changes, ie. when the artist 
+                     context every time the active document changes, ie. when the artist
                      has multiple documents opened and switch between them."
         default_value: False
 
@@ -40,7 +40,7 @@ configuration:
                      value to the current major version + 1."
         default_value: 5
 
-    debug_logging: 
+    debug_logging:
         type: bool
         description: Controls whether debug messages should be emitted to the logger
         default_value: false
@@ -92,8 +92,8 @@ configuration:
 
 # the Shotgun fields that this engine needs in order to operate correctly
 requires_shotgun_fields:
-        
-# More verbose description of this item 
+
+# More verbose description of this item
 display_name: "Shotgun Engine for Krita"
 description: "Shotgun Integration in Krita"
 
@@ -103,4 +103,3 @@ requires_shotgun_version:
 # This is an actual requirement as this version is one of the first
 # stable tk core versions that support python3, required by Krita.
 requires_core_version: "v0.19.5"
-

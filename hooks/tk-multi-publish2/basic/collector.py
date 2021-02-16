@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------------
 # Copyright (c) 2019-2020, Diego Garcia Huerta.
 #
-# Your use of this software as distributed in this GitHub repository, is 
+# Your use of this software as distributed in this GitHub repository, is
 # governed by the BSD 3-clause License.
 #
 # Your use of the Shotgun Pipeline Toolkit is governed by the applicable license
@@ -14,10 +14,9 @@ import os
 from functools import partial
 
 import sgtk
+from krita import Krita
 from sgtk import TankError
 from sgtk.util.filesystem import create_valid_filename
-
-from krita import Krita
 
 __author__ = "Diego Garcia Huerta"
 __contact__ = "https://www.linkedin.com/in/diegogh/"
@@ -134,7 +133,9 @@ class KritaSessionCollector(HookBaseClass):
             display_name = "Current Krita Session"
 
         # create the session item for the publish hierarchy
-        session_item = parent_item.create_item("krita.session", "Krita Session", display_name)
+        session_item = parent_item.create_item(
+            "krita.session", "Krita Session", display_name
+        )
 
         # get the icon path to display for this item
         icon_path = os.path.join(self.disk_location, os.pardir, "icons", "krita.png")
@@ -145,7 +146,9 @@ class KritaSessionCollector(HookBaseClass):
         work_template_setting = settings.get("Work Template")
         if work_template_setting:
 
-            work_template = publisher.engine.get_template_by_name(work_template_setting.value)
+            work_template = publisher.engine.get_template_by_name(
+                work_template_setting.value
+            )
 
             # store the template on the item for use by publish plugins. we
             # can't evaluate the fields here because there's no guarantee the
@@ -178,7 +181,13 @@ class KritaSessionCollector(HookBaseClass):
         return results
 
     def create_node_layer_item(
-        self, settings, parent_item, node, display_name=None, icon_name=None, is_header=False
+        self,
+        settings,
+        parent_item,
+        node,
+        display_name=None,
+        icon_name=None,
+        is_header=False,
     ):
         publisher = self.parent
 
@@ -210,10 +219,13 @@ class KritaSessionCollector(HookBaseClass):
         work_template_setting = settings.get("Work Template")
 
         if work_template_setting:
-            work_template = publisher.engine.get_template_by_name(work_template_setting.value)
+            work_template = publisher.engine.get_template_by_name(
+                work_template_setting.value
+            )
             if not work_template:
                 raise TankError(
-                    "Missing Work Template in templates.yml: %s " % work_template_setting.value
+                    "Missing Work Template in templates.yml: %s "
+                    % work_template_setting.value
                 )
 
         layer_item.properties["work_template"] = work_template
@@ -258,7 +270,9 @@ class KritaSessionCollector(HookBaseClass):
                     is_header=True,
                 )
 
-                layer_item_fn = partial(self.create_node_layer_item, settings, top_layer_item)
+                layer_item_fn = partial(
+                    self.create_node_layer_item, settings, top_layer_item
+                )
 
                 layer_items = self._recurse_layers(parent_node, fn=layer_item_fn)
                 self.logger.info("Collected current document Layers")
@@ -325,10 +339,13 @@ class KritaSessionCollector(HookBaseClass):
 
                 if work_template:
                     self.logger.debug(
-                        "Work template defined for the layers as folder: %s " % work_template
+                        "Work template defined for the layers as folder: %s "
+                        % work_template
                     )
                 else:
-                    self.logger.debug("No work template defined for the layers as folder.")
+                    self.logger.debug(
+                        "No work template defined for the layers as folder."
+                    )
                 self.logger.info("Collected current document Layers as folder")
 
         return layer_item

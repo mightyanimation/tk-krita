@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------------
 # Copyright (c) 2019-2020, Diego Garcia Huerta.
 #
-# Your use of this software as distributed in this GitHub repository, is 
+# Your use of this software as distributed in this GitHub repository, is
 # governed by the BSD 3-clause License.
 #
 # Your use of the Shotgun Pipeline Toolkit is governed by the applicable license
@@ -10,17 +10,16 @@
 # The full license is in the file LICENSE, distributed with this software.
 # ----------------------------------------------------------------------------
 
+import contextlib
 import os
 import traceback
-import contextlib
+from tempfile import NamedTemporaryFile
 
 import sgtk
+from krita import InfoObject, Krita
 from sgtk import TankError
-from tempfile import NamedTemporaryFile
-from sgtk.util.version import is_version_older
 from sgtk.util.filesystem import copy_file, ensure_folder_exists
-
-from krita import Krita, InfoObject
+from sgtk.util.version import is_version_older
 
 __author__ = "Diego Garcia Huerta"
 __contact__ = "https://www.linkedin.com/in/diegogh/"
@@ -325,7 +324,7 @@ class KritaLayerPublishPlugin(HookBaseClass):
 
     def get_export_path(self, settings, item):
         """
-        Retrieves the path to export eh layer before it gets copied to the 
+        Retrieves the path to export eh layer before it gets copied to the
         publish location. This is handy if you use a different location for
         wip files than publish files.
 
@@ -334,10 +333,9 @@ class KritaLayerPublishPlugin(HookBaseClass):
             instances.
         :param item: Item to process
 
-        :returns: the location where the layer will be export before it is 
+        :returns: the location where the layer will be export before it is
             published
         """
-        publisher = self.parent
 
         export_path = item.get_property("export_path")
         if export_path:
@@ -357,11 +355,13 @@ class KritaLayerPublishPlugin(HookBaseClass):
 
             # We allow this environment variable to allow some sort of customization
             # when it comes to choosing the default export extension.
-            default_extension = os.environ.get("SGTK_KRITA_LAYER_DEFAULT_EXTENSION", "png")
+            default_extension = os.environ.get(
+                "SGTK_KRITA_LAYER_DEFAULT_EXTENSION", "png"
+            )
 
             layer_name = "%s.%s" % (node_name, default_extension)
             export_path = os.path.join(
-                session_path_dir, "layers", session_filename_file, layer_name
+                session_dir, "layers", session_filename_file, layer_name
             )
 
         self.logger.debug("Export path will be: %s" % export_path)
@@ -378,7 +378,6 @@ class KritaLayerPublishPlugin(HookBaseClass):
             return publish_path
 
         # ensure templates are available
-        work_session_template = item.properties.get("work_template")
         publish_template = self.get_publish_template(settings, item)
 
         publish_path = self.get_path_from_work_template(settings, item, publish_template)
@@ -406,7 +405,9 @@ class KritaLayerPublishPlugin(HookBaseClass):
     def session_validate(self, settings, item):
         document = _session_document()
         if not document:
-            error_msg = "There is no active document opened in Krita. Publishing Canceled."
+            error_msg = (
+                "There is no active document opened in Krita. Publishing Canceled."
+            )
             self.logger.error(error_msg)
             raise Exception(error_msg)
 
@@ -499,16 +500,14 @@ class KritaLayerPublishPlugin(HookBaseClass):
         node_name = item.properties["node_name"]
         self.logger.debug("Validating layer: %s" % node_name)
 
-        publisher = self.parent
-
         self.session_validate(settings, item)
         self.templates_validate(settings, item)
 
         # figure out the export path
-        export_path = self.get_export_path(settings, item)
+        self.get_export_path(settings, item)
 
         # and the publish path
-        publish_path = self.get_publish_path(settings, item)
+        self.get_publish_path(settings, item)
 
         # run the base class validation
         return super(KritaLayerPublishPlugin, self).validate(settings, item)
@@ -543,10 +542,7 @@ class KritaLayerPublishPlugin(HookBaseClass):
         location.
         """
 
-        krita_app = Krita.instance()
-
         node = item.properties["node"]
-        session_path = item.properties["session_path"]
         active_doc = item.properties.get("session_document")
 
         export_path = self.get_export_path(settings, item)

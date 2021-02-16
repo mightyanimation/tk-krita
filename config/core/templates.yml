@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------------
 # Copyright (c) 2019-2020, Diego Garcia Huerta.
 #
-# Your use of this software as distributed in this GitHub repository, is 
+# Your use of this software as distributed in this GitHub repository, is
 # governed by the BSD 3-clause License.
 #
 # Your use of the Shotgun Pipeline Toolkit is governed by the applicable license
@@ -14,8 +14,8 @@
 # Contact: https://www.linkedin.com/in/diegogh/
 #
 # YOU SHOULD MERGE these entries into your template.yml configuration file, as
-# THIS FILE BY ITSELF WILL NOT WORK 
-# These are the additions to the template.yml to get the engine up and 
+# THIS FILE BY ITSELF WILL NOT WORK
+# These are the additions to the template.yml to get the engine up and
 # running with the default tk-apps
 
 
@@ -60,7 +60,7 @@ paths:
         root_name: 'primary'
 
     # These templates are related to publishing layers within Krita
-    
+
     # where to export the individual layers before publishing them
     krita_asset_layer_export:
         definition: '@asset_root/work/krita/layers/{Asset}_krita_layers.v{version}/@krita_layer_name'
@@ -81,7 +81,7 @@ paths:
         definition: '@asset_root/publish/krita/layers/{Asset}_krita_layers.v{version}'
         root_name: 'primary'
 
-    # shot 
+    # shot
     # define the location of a work area
     shot_work_area_krita:
         definition: '@shot_root/work/krita'
@@ -106,7 +106,7 @@ paths:
     krita_shot_publish:
         definition: '@shot_root/publish/krita/{name}.v{version}/{name}.v{version}.kra'
         root_name: 'primary'
-    
+
     # These templates are related to publishing layers within Krita
     # where to export the individual layers before publishing them
     krita_shot_layer_export:
